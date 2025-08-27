@@ -2,7 +2,7 @@
 using namespace std;
 int main() {
     int size = 60;
-    int i, a[size], n, change, done = 0;
+    int i, a[size], n, ch, done = 0;
       do {
         cout << "\nMenu:\n";
         cout << "1. Create Array\n";
@@ -12,9 +12,9 @@ int main() {
         cout << "5. Search Element\n";
         cout << "6. Exit\n";
         cout << "Enter your choice: ";
-        cin >> change;
+        cin >> ch;
     
-        switch(change){
+        switch(ch){
                 case 1:
                 cout << "Enter array size: ";
                 cin >> n;
@@ -113,6 +113,6 @@ int main() {
                 default:
                 cout << "Please enter a valid number from the menu!" << endl;
         }
-      }while(change!=6);
+      }while(ch!=6);
     return 0;
 }
