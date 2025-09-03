@@ -4,15 +4,14 @@ int main() {
     int n;
     cout << "\nEnter dimension of Upper Triangular Matrix: ";
     cin >> n;
-    int L[n*(n+1)/2];
+    int t = n*(n+1)/2;
+    int L[t];
     cout << "Enter non-zero elements row-wise:\n";
-    int k = 0;
-    for(int i = 0; i < n; i++)
-        for(int j = 0; j <= i; j++)
-            cin >> L[k++];
+    for(int i = 0; i < t; i++)
+            cin >> L[i];
     
     cout << "Full Matrix:\n";
-    k = 0;
+    int k = 0;
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
             if(j >= i) cout << L[k++] << "\t";

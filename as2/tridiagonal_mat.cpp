@@ -23,10 +23,10 @@ int main() {
     cout << "\nFull Tri-diagonal Matrix:\n";
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < n; j++) {
-            if(i - j == 1) cout << lower[i-1] << " ";  
-            else if(i == j) cout << mainD[i] << " ";    
-            else if(i - j == -1) cout << upper[i] << " "; 
-            else cout << "0 ";
+            if(i - j == 1) cout << lower[i-1] << "\t";  
+            else if(i == j) cout << mainD[i] << "\t";    
+            else if(i - j == -1) cout << upper[i] << "\t"; 
+            else cout << "0\t";
         }
         cout << endl;
     }
