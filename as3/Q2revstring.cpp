@@ -4,7 +4,7 @@ using namespace std;
 int main(){
     int size,i,top = -1;
     string s;
-    cout << "Enter a string!: "<< endl;
+    cout << "Enter a string: "<< endl;
     getline(cin,s);
     size = s.length();
     char a[size];

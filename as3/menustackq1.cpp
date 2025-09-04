@@ -50,7 +50,7 @@ void peek(){
 		cout << "Stack is Empty!" << endl;
 	}
 	else{
-		cout << "Element at top is " << stack[top] << endl;
+		cout << "Element at the top is " << stack[top] << endl;
 	}
 }
 

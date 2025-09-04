@@ -120,7 +120,7 @@ int main(){
             break;
 
             default :
-            cout << "Invalid choice! Try again\n";
+            cout << "Invalid choice ! Try again\n";
         }
 
     }while(c!=7);
