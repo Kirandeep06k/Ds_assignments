@@ -1,149 +1,119 @@
 #include <iostream>
 using namespace std;
 
-class Node {
+class Node{
 public:
     int data;
     Node* next;
-
-    Node(int data1) {
-        data = data1;
+    Node(int val){
+        data = val;
         next = nullptr;
     }
 };
 
-class Linkedlist {
-public:
+class CircularLinkedList{
+private:
     Node* head;
-    Linkedlist() {
-        head = NULL;
+public:
+    CircularLinkedList(){ 
+        head = nullptr; 
     }
-
-    void create() {
+    void create(){
         int n;
         cout << "Enter number of nodes: ";
         cin >> n;
         if (n <= 0) {
-            cout << "List must have at least one node.";
+            cout << "List must have at least one node.\n";
             return;
         }
-        Node* prev = nullptr;
-        for (int i = 1; i <= n; i++) {
+        Node* last = nullptr;
+        for(int i = 1; i <= n; i++){
             int val;
             cout << "Enter data for node " << i << ": ";
             cin >> val;
             Node* newNode = new Node(val);
-            if (head == NULL)
+            if(!head){
                 head = newNode;
-            else
-                prev->next = newNode;
-            prev = newNode;
-        }
-        prev->next = head; // make circular
-    }
-
-    // Function to check even parity (even number of 1s)
-    int check(int n) {
-        int onecount = 0;
-        while (n) {
-            if ((n & 1) == 1)
-                onecount++;
-            n = n >> 1;
-        }
-        return (onecount % 2 == 0);
-    }
-
-    // Delete head node
-    void delAtHead() {
-        if (head == NULL)
-            return;
-
-        Node* tail = head;
-        while (tail->next != head)
-            tail = tail->next;
-
-        Node* temp = head;
-        if (head->next == head)
-            head = NULL;
-        else {
-            head = head->next;
-            tail->next = head;
-        }
-        delete temp;
-    }
-
-    // Delete node with given value
-    void delThisVal(int v) {
-        if (head == NULL)
-            return;
-
-        if (head->data == v) {
-            delAtHead();
-            return;
-        }
-
-        Node* temp = head;
-        while (temp->next != head) {
-            if (temp->next->data == v) {
-                Node* todel = temp->next;
-                temp->next = todel->next;
-                delete todel;
-                return;
-            }
-            temp = temp->next;
-        }
-    }
-
-    void delEvenParity(){
-        if(head == NULL)
-            return;
-        bool changed;
-        do{
-            changed = false;
-            Node* temp = head;
-            if (check(head->data)){
-                delAtHead();
-                changed = true;
-                if (head == NULL) return;
+                head->next = head;
+                last = head;
             }
             else{
-                temp = head;
-                while (temp->next != head){
-                    if (check(temp->next->data)){
-                        Node* todel = temp->next;
-                        temp->next = todel->next;
-                        delete todel;
-                        changed = true;
-                    } else {
-                        temp = temp->next;
-                    }
-                    if (head == NULL) break;
-                }
+                newNode->next = head;
+                last->next = newNode;
+                last = newNode;
             }
-        } while(changed); 
+        }
+    }
+
+    bool isEvenParity(int num){
+        int count = 0;
+        while (num) {
+            count += (num & 1);
+            num >>= 1;
+        }
+        return (count % 2 == 0);
+    }
+
+    void deleteEvenParityNodes(){
+        if(!head) 
+        return;
+
+        bool deleted;
+        do{
+            deleted = false;
+            Node* current = head;
+            Node* prev = nullptr;
+            Node* tail = head;
+            while(tail->next != head){
+                tail = tail->next;
+            }
+            prev = tail;
+            do {
+                if (isEvenParity(current->data)){
+                    if (current == head){
+                        head = head->next;
+                        prev->next = head;
+                        delete current;
+                        deleted = true;
+                        break; 
+                    }
+                    else{
+                        prev->next = current->next;
+                        delete current;
+                        deleted = true;
+                        break;
+                    }
+                }
+                prev = current;
+                current = current->next;
+            }while(current != head);
+            
+        } while(deleted && head);
     }
 
     void display(){
-        if (head == NULL){
+        if(!head){
             cout << "List is empty.\n";
             return;
         }
         Node* temp = head;
+        cout << "List: ";
         do{
-            cout << temp->data << "->";
+            cout << temp->data;
             temp = temp->next;
+            if (temp != head) cout << " -> ";
         }while(temp != head);
         cout << endl;
     }
 };
 
 int main() {
-    Linkedlist ob;
+    CircularLinkedList ob;
     ob.create();
-    cout << "Original Circular linked list:\n";
+    cout << "\nOriginal Circular Linked List:\n";
     ob.display();
-    ob.delEvenParity();
-    cout << "New Circular linked list:\n";
+    ob.deleteEvenParityNodes();
+    cout << "\nList after deleting even parity nodes:\n";
     ob.display();
     return 0;
 }
