@@ -1,7 +1,4 @@
 #include <iostream>
-#include <algorithm>
-#include <utility>
-
 using namespace std;
 void selectionSort(int a[], int n) {
     for (int i = 0; i < n - 1; i++) {
@@ -78,19 +75,22 @@ void mergeSort(int a[], int l, int r) {
 }
 
  int partition(int a[], int low, int high) {
-    int pivot = a[high];  
-    int i = low - 1;           
-
+    int pivot = a[high];
+    int i = low - 1;
     for (int j = low; j < high; j++) {
         if (a[j] <= pivot) {
             i++;
-
-            swap(a[i], a[j]);
+            int temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
         }
     }
-    swap(a[i + 1], a[high]); 
-    return i + 1;                
+    int temp = a[i + 1];
+    a[i + 1] = a[high];
+    a[high] = temp;
+    return i + 1;
 }
+
 
 void quickSort(int a[], int low, int high) {
         if(low>=high)
