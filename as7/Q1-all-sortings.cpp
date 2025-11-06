@@ -1,4 +1,7 @@
 #include <iostream>
+#include <algorithm>
+#include <utility>
+
 using namespace std;
 void selectionSort(int a[], int n) {
     for (int i = 0; i < n - 1; i++) {
@@ -37,67 +40,66 @@ void bubbleSort(int a[], int n) {
     }
 }
 
-void merge(int a[], int l, int m, int r) {
-    int n1 = m - l + 1;
-    int n2 = r - m;
+void merge(int a[], int l, int r, int m) {
+    int size = r - l + 1;
+    int* t = new int[size];
 
-    int *L = new int[n1];
-    int *R = new int[n2];
+    int left = l;
+    int right = m + 1;
+    int i = 0;
 
-    for (int i = 0; i < n1; i++)
-        L[i] = a[l + i];
-    for (int j = 0; j < n2; j++)
-        R[j] = a[m + 1 + j];
-
-    int i = 0, j = 0, k = l;
-    while (i < n1 && j < n2) {
-        if (L[i] <= R[j])
-            a[k++] = L[i++];
-        else
-            a[k++] = R[j++];
+    while (left <= m && right <= r) {
+        if (a[left] <= a[right]) {
+            t[i++] = a[left++];
+        }
+        else {
+            t[i++] = a[right++];
+        }
     }
-    while (i < n1)
-        a[k++] = L[i++];
-    while (j < n2)
-        a[k++] = R[j++];
+    while (left <= m)
+        t[i++] = a[left++];
+    while (right <= r)
+        t[i++] = a[right++];
 
-    delete[] L;
-    delete[] R;
+    i = 0;
+    while (l <= r) {
+        a[l++] = t[i++];
+    }
+
+    delete[] t;
 }
 
 void mergeSort(int a[], int l, int r) {
-    if (l < r) {
-        int m = (l + r) / 2;
-        mergeSort(a, l, m);
-        mergeSort(a, m + 1, r);
-        merge(a, l, m, r);
-    }
+    if (l == r) return;
+    int m = l + (r - l) / 2; 
+    mergeSort(a, l, m);
+    mergeSort(a, m + 1, r);
+    merge(a, l, r, m);
 }
 
-int partition(int a[], int low, int high) {
-    int pivot = a[high];
-    int i = (low - 1);
+ int partition(int a[], int low, int high) {
+    int pivot = a[high];  
+    int i = low - 1;           
+
     for (int j = low; j < high; j++) {
-        if (a[j] < pivot) {
+        if (a[j] <= pivot) {
             i++;
-            int temp = a[i];
-            a[i] = a[j];
-            a[j] = temp;
+
+            swap(a[i], a[j]);
         }
     }
-    int temp = a[i + 1];
-    a[i + 1] = a[high];
-    a[high] = temp;
-    return (i + 1);
+    swap(a[i + 1], a[high]); 
+    return i + 1;                
 }
 
 void quickSort(int a[], int low, int high) {
-    if (low < high) {
-        int pi = partition(a, low, high);
-        quickSort(a, low, pi - 1);
-        quickSort(a, pi + 1, high);
+        if(low>=high)
+        return;
+        int p = partition(a, low, high); 
+        quickSort(a, low, p-1);
+        quickSort(a, p, high);
     }
-}
+
 
 void display(int a[], int n) {
     for (int i = 0; i < n; i++)
