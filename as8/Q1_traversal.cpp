@@ -1,57 +1,67 @@
 #include <iostream>
 using namespace std;
-class Node {
+class Node{
 public:
     int data;
     Node* left;
     Node* right;
-    Node(int val) {
+    Node(int val){
         data = val;
         left = right = nullptr;
     }
 };
 
-class Tree {
-public:
-    void preOrder(Node* root) {
-        if (root == nullptr) return;
-        cout << root->data << " ";
-        preOrder(root->left);
-        preOrder(root->right);
+Node* insert(Node* root, int val){
+    if(root == nullptr)
+        return new Node(val);
+    if(val < root->data)
+        root->left = insert(root->left, val);
+    else
+        root->right = insert(root->right, val);
+    return root;
+}
+
+void preOrder(Node* root){
+    if(root == nullptr)
+    return;
+    cout << root->data << " ";
+    preOrder(root->left);
+    preOrder(root->right);
+}
+
+void inOrder(Node* root){
+    if(root == nullptr)
+    return;
+    inOrder(root->left);
+    cout << root->data << " ";
+    inOrder(root->right);
+}
+
+void postOrder(Node* root){
+    if(root == nullptr)
+    return;
+    postOrder(root->left);
+    postOrder(root->right);
+    cout << root->data << " ";
+}
+
+int main(){
+    Node* root = nullptr;
+    int n, val;
+    cout << "Enter number of elements: ";
+    cin >> n;
+    cout << "Enter the numbers:\n";
+    for(int i = 0; i < n; i++){
+        cin >> val;
+        root = insert(root, val);
     }
 
-    void inOrder(Node* root) {
-        if (root == nullptr) return;
-        inOrder(root->left);
-        cout << root->data << " ";
-        inOrder(root->right);
-    }
-
-    void postOrder(Node* root) {
-        if (root == nullptr) return;
-        postOrder(root->left);
-        postOrder(root->right);
-        cout << root->data << " ";
-    }
-};
-
-int main() {
-    Node* root = new Node(1);
-    root->left = new Node(2);
-    root->right = new Node(3);
-    root->left->left = new Node(4);
-    root->left->right = new Node(5);
-    root->right->right = new Node(6);
-
-    Tree t;
-
-    cout << "Preorder traversal: ";
-    t.preOrder(root);
+    cout << "\nPreorder traversal: ";
+    preOrder(root);
     cout << "\nInorder traversal: ";
-    t.inOrder(root);
+    inOrder(root);
     cout << "\nPostorder traversal: ";
-    t.postOrder(root);
+    postOrder(root);
     cout << endl;
-
     return 0;
 }
