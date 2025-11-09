@@ -1,0 +1,16 @@
+
+*.exe
+*.out
+*.o
+
+
+.vscode/
+build/
+debug/
+dist/
+
+
+*.log
+*.tmp
+*.cache
+
