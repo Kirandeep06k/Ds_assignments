@@ -79,6 +79,26 @@ TreeNode* deleteNode(TreeNode* root, int key) {
     }
 }
 
+int maxDepth(TreeNode* root) {
+        if(!root)
+        return 0;
+
+        return 1 + max (maxDepth(root->left), maxDepth(root->right));
+}
+
+int minDepth(TreeNode* root) {
+        if(!root)
+        return 0;
+
+        if(!root->left)
+        return 1 +  minDepth(root->right);
+
+        if(!root->right)
+        return 1 +  minDepth(root->left);
+
+        return 1 + min (minDepth(root->left), minDepth(root->right));
+}
+
 int main() {
     TreeNode* root = NULL;
     int n, val, key;
@@ -98,5 +118,7 @@ int main() {
     cout << "BST (Inorder after insertion): ";
     inorder(root);
     cout << endl;
+    cout << "Max Depth of BST: " << maxDepth(root) << endl;
+    cout << "Min Depth of BST: " << minDepth(root) << endl;
     return 0;
 }
