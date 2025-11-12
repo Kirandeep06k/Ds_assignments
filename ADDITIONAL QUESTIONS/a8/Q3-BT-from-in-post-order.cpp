@@ -22,29 +22,25 @@ public:
         }
         return -1;
     }
-
-    // CHANGED: Function name same, but uses postorder now
+    
     TreeNode* tree(vector<int>& inorder, vector<int>& postorder, int start, int end, int& index) {
         if (start > end)
             return nullptr;
 
-        // CHANGED: Root comes from postorder[index] (from end to start)
         TreeNode* root = new TreeNode(postorder[index]);
         index--;
 
         int pos = find(root->val, inorder, start, end);
 
-        // CHANGED: Build RIGHT first, then LEFT (reverse of preorder)
         root->right = tree(inorder, postorder, pos + 1, end, index);
         root->left = tree(inorder, postorder, start, pos - 1, index);
 
         return root;
     }
 
-    // CHANGED: Accepts inorder and postorder instead of preorder
     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
         int n = postorder.size();
-        int index = n - 1; // CHANGED: Start from end of postorder
+        int index = n - 1;
         return tree(inorder, postorder, 0, n - 1, index);
     }
 
