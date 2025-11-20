@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <stack>
 using namespace std;
 
 class Node {
@@ -6,105 +7,91 @@ public:
     int data;
     Node* left;
     Node* right;
-    Node(int val) {
-        data = val;
-        left = right = nullptr;
+    
+    Node() : data(0), left(nullptr), right(nullptr) {
+
+    }
+    Node(int data) : data(data), left(nullptr), right(nullptr) {
+
+    }
+    Node(int data, Node* left, Node* right) : data(data), left(left), right(right) {
+
     }
 };
 
-Node* insertBST(Node* root, int val) {
-    if (!root) return new Node(val);
-    if (val < root->data)
-        root->left = insertBST(root->left, val);
-    else
-        root->right = insertBST(root->right, val);
-    return root;
-}
-
-class Merge {
+class mergetodll {
 public:
-    void inorder(Node* root, vector<Node*>& arr) {
-        if (!root) return;
-        inorder(root->left, arr);
-        arr.push_back(root);
-        inorder(root->right, arr);
-    }
+    Node* mergeBSTs(Node* x, Node* y) {
+        stack<Node*> s1, s2;
+        Node* head = NULL;
+        Node* prev = NULL;
+        Node* cur;
+        
+        while(x || y || !s1.empty() || !s2.empty()) {
+            cur = NULL;
+            while(x) {
+                s1.push(x);
+                x = x->left;
+            }
 
-    vector<Node*> mergeVectors(vector<Node*>& a, vector<Node*>& b) {
-        vector<Node*> merged;
-        int i = 0, j = 0;
-        while (i < a.size() && j < b.size()) {
-            if (a[i]->data < b[j]->data)
-                merged.push_back(a[i++]);
-            else
-                merged.push_back(b[j++]);
+            while(y) {
+                s2.push(y);
+                y = y->left;
+            }
+
+            if(s2.empty() || (!s1.empty() && s1.top()->data <= s2.top()->data)) {
+                cur = s1.top();
+                s1.pop();
+                x = cur->right;
+            }
+            else {
+                cur = s2.top();
+                s2.pop();
+                y = cur->right;
+            }
+            
+            cur->left = prev;
+            cur->right = NULL;
+            
+            if(prev) {
+                prev->right = cur;
+            }
+            else {
+                head = cur;
+            }
+            prev = cur;
         }
-        while (i < a.size()) merged.push_back(a[i++]);
-        while (j < b.size()) merged.push_back(b[j++]);
-        return merged;
-    }
-
-    Node* linkDLL(vector<Node*>& arr) {
-        if (arr.empty()) return nullptr;
-        Node* head = arr[0];
-        Node* curr = head;
-        curr->left = nullptr;
-
-        for (int i = 1; i < arr.size(); i++) {
-            curr->right = arr[i];
-            arr[i]->left = curr;
-            curr = arr[i];
-        }
-        curr->right = nullptr;
         return head;
     }
-
-    Node* mergeBSTs(Node* root1, Node* root2) {
-        vector<Node*> a, b;
-        inorder(root1, a);
-        inorder(root2, b);
-        vector<Node*> merged = mergeVectors(a, b);
-        return linkDLL(merged);
-    }
 };
 
-void printDLL(Node* head) {
+void printDLLForward(Node* head) {
     Node* curr = head;
-    while (curr) {
+    while(curr) {
         cout << curr->data;
-        if (curr->right) cout << " <--> ";
+        if(curr->right)
+        cout << " <-> ";
         curr = curr->right;
     }
-    cout << " <--> null\n";
+    cout << " <-> nullptr" << endl;
 }
 
 int main() {
-    Merge s;
-    Node* root1 = nullptr;
-    Node* root2 = nullptr;
-
-    int n1, n2, val;
-
-    cout << "Enter number of nodes for BST1: ";
-    cin >> n1;
-    cout << "Enter elements of BST1: ";
-    for (int i = 0; i < n1; i++) {
-        cin >> val;
-        root1 = insertBST(root1, val);
-    }
-
-    cout << "Enter number of nodes for BST2: ";
-    cin >> n2;
-    cout << "Enter elements of BST2: ";
-    for (int i = 0; i < n2; i++) {
-        cin >> val;
-        root2 = insertBST(root2, val);
-    }
-
-    Node* head = s.mergeBSTs(root1, root2);
-
-    cout << "\nMerged Doubly Linked List:\n";
-    printDLL(head);
-
+    mergetodll m;
+    Node* root1 = new Node(20);
+    root1->left = new Node(10);
+    root1->right = new Node(30);
+    root1->right->left = new Node(25);
+    root1->right->right = new Node(100);
+    
+    
+    Node* root2 = new Node(50);
+    root2->left = new Node(5);
+    root2->right = new Node(70);
+    
+    Node* dllHead = m.mergeBSTs(root1, root2);
+    
+    cout << "DLL Forward: ";
+    printDLLForward(dllHead);
     return 0;
 }
