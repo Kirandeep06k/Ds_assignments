@@ -15,15 +15,18 @@ public:
 class checkBST {
 public:
     vector<int> inorder(Node* root) {
-        vector<int> l, r, ans;
-        if (!root)
-        return {};
-        l = inorder(root->left);
-        r = inorder(root->right);
-        ans.insert(ans.end(), l.begin(), l.end());
-        ans.push_back(root->data);
-        ans.insert(ans.end(), r.begin(), r.end());
-        return ans;
+
+        vector<int>res;
+        helper(root, res);
+        return res; 
+    }
+
+    void helper(Node* root, vector<int>& res) {
+        if (root == NULL) return;
+
+        helper(root->left, res);
+        res.push_back(root->data);
+        helper(root->right, res);
     }
 
     bool isBST(Node* root) {
